@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://localhost:8080/api';
+// Use relative path in production (same server), and localhost in development
+const API_BASE_URL = import.meta.env.PROD ? '/api' : 'http://localhost:8080/api';
 
 export async function fetchArticles() {
   const response = await fetch(`${API_BASE_URL}/all`);
