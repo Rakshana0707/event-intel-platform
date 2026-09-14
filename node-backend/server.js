@@ -144,8 +144,8 @@ app.get('/api/sentiment-analytics', async (req, res) => {
     const entityBreakdown = {};
 
     const entitiesToTrack = [
-      "Apple", "Google", "Microsoft", "Tesla", "Amazon",
-      "India", "USA", "China", "Germany", "Japan"
+      "React", "Python", "JavaScript", "Docker", "Node", 
+      "AWS", "Rust", "TypeScript", "AI", "CSS"
     ];
 
     // Initialize mapping metrics

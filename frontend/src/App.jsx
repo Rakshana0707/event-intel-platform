@@ -188,10 +188,10 @@ export default function App() {
           {sentimentData && sentimentData.entities && (
             <div className="glass-card animate-fade-in">
               <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                📊 Company & Location Sentiment Index
+                📊 Technology & Framework Sentiment Index
               </h2>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '1.5rem' }}>
-                Tracks whether articles mentioning specific brands or locations carry positive, neutral, or negative tones.
+                Tracks whether articles mentioning specific languages or tools carry positive, neutral, or negative tones.
               </p>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -244,7 +244,7 @@ export default function App() {
                 
                 {Object.entries(sentimentData.entities).filter(([name, data]) => data.total > 0).length === 0 && (
                   <div style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '1rem', fontStyle: 'italic', fontSize: '0.85rem' }}>
-                    No tracked company or country entities found in the saved articles yet. Import articles to run analysis.
+                    No tracked technologies or frameworks found in the saved articles yet. Import articles to run analysis.
                   </div>
                 )}
               </div>
