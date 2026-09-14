@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import pool, { initDatabase } from './config/db.js';
 import { fetchNewsAndSave } from './services/newsService.js';
 import { extractEntities } from './services/entityService.js';
@@ -11,6 +13,9 @@ import { removeStopWords } from './utils/stopwordRemover.js';
 import { countWordFrequencies } from './utils/wordFrequencyCounter.js';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -175,6 +180,18 @@ app.get('/api/sentiment-analytics', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// 10. Serve static frontend files in production
+if (process.env.NODE_ENV === 'production') {
+  // Serve the static files from the React app build directory
+  const frontendDistPath = path.join(__dirname, '../frontend/dist');
+  app.use(express.static(frontendDistPath));
+
+  // Catch-all route to serve index.html for React Router (if used) or fallback
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendDistPath, 'index.html'));
+  });
+}
 
 // Initialize database tables and then launch server listener
 initDatabase().then(() => {
