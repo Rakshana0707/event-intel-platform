@@ -20,12 +20,12 @@ app.use(cors());
 app.use(express.json());
 
 // 1. Health check endpoint
-app.get('/test', (req, res) => {
+app.get('/api/test', (req, res) => {
   res.send('System Running');
 });
 
 // 2. Fetch all articles in the database
-app.get('/all', async (req, res) => {
+app.get('/api/all', async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT * FROM articles ORDER BY id DESC');
     res.json(rows);
@@ -36,7 +36,7 @@ app.get('/all', async (req, res) => {
 });
 
 // 3. Save a new article manually
-app.post('/add', async (req, res) => {
+app.post('/api/add', async (req, res) => {
   const { title, content } = req.body;
   if (!title) {
     return res.status(400).json({ error: 'Title is required' });
@@ -56,7 +56,7 @@ app.post('/add', async (req, res) => {
 });
 
 // 4. Ingest articles from placeholder API and save to database
-app.get('/fetch-news', async (req, res) => {
+app.get('/api/fetch-news', async (req, res) => {
   try {
     const saved = await fetchNewsAndSave();
     res.json(saved);
@@ -83,7 +83,7 @@ async function analyzeAllArticles() {
 }
 
 // 5. Analyze and return all word frequencies
-app.get('/analyze', async (req, res) => {
+app.get('/api/analyze', async (req, res) => {
   try {
     const frequencies = await analyzeAllArticles();
     res.json(frequencies);
@@ -94,7 +94,7 @@ app.get('/analyze', async (req, res) => {
 });
 
 // 6. Compare current frequencies with mock baseline to find trending words
-app.get('/trends', async (req, res) => {
+app.get('/api/trends', async (req, res) => {
   try {
     const currentData = await analyzeAllArticles();
     const oldData = getMockOldData();
@@ -107,7 +107,7 @@ app.get('/trends', async (req, res) => {
 });
 
 // 7. Named entity extraction demo or parameter-driven extraction
-app.get('/entities', async (req, res) => {
+app.get('/api/entities', async (req, res) => {
   try {
     const text = req.query.text || "Apple is expanding in India and competing with Google";
     const entities = extractEntities(text);
@@ -119,7 +119,7 @@ app.get('/entities', async (req, res) => {
 });
 
 // 8. Wipe database endpoint
-app.delete('/clear', async (req, res) => {
+app.delete('/api/clear', async (req, res) => {
   try {
     await pool.query('TRUNCATE TABLE articles');
     console.log('🗑️ Database cleared manually via client call.');
@@ -131,7 +131,7 @@ app.delete('/clear', async (req, res) => {
 });
 
 // 9. Sentiment analytics & entity correlation aggregator endpoint
-app.get('/sentiment-analytics', async (req, res) => {
+app.get('/api/sentiment-analytics', async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT title, content, sentiment FROM articles');
     
