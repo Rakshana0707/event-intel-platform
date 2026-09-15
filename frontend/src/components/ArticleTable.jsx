@@ -122,6 +122,7 @@ export default function ArticleTable({ articles = [], onAddArticle }) {
                 <th style={{ width: '50px' }}>ID</th>
                 <th style={{ width: '180px' }}>Title</th>
                 <th>Content Preview</th>
+                <th style={{ width: '90px' }}>Date</th>
                 <th style={{ width: '90px', textAlign: 'center' }}>Sentiment</th>
                 <th style={{ width: '70px', textAlign: 'center' }}>Analyze</th>
               </tr>
@@ -133,6 +134,9 @@ export default function ArticleTable({ articles = [], onAddArticle }) {
                   <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{article.title}</td>
                   <td style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
                     {article.content ? (article.content.length > 120 ? `${article.content.substring(0, 120)}...` : article.content) : <em>No text content</em>}
+                  </td>
+                  <td style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                    {article.created_at ? new Date(article.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Just now'}
                   </td>
                   <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
                     {article.sentiment === 'positive' && <span className="badge success" style={{ textTransform: 'capitalize' }}>Positive</span>}

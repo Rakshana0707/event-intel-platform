@@ -21,23 +21,27 @@ export async function initDatabase() {
     connection = await pool.getConnection();
     console.log('Successfully connected to MySQL event_intel_db database.');
     
-    // Create articles table if not exists with sentiment column
+    // Create articles table if not exists with sentiment and created_at columns
     await connection.query(`
       CREATE TABLE IF NOT EXISTS articles (
         id INT AUTO_INCREMENT PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         content LONGTEXT,
-        sentiment VARCHAR(20) DEFAULT 'neutral'
+        sentiment VARCHAR(20) DEFAULT 'neutral',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);
 
-    // Column Migration check in case table exists from previous runs
+    // Column Migration checks in case table exists from previous runs
     try {
       await connection.query("ALTER TABLE articles ADD COLUMN sentiment VARCHAR(20) DEFAULT 'neutral'");
       console.log('Successfully migrated database: Added sentiment column.');
-    } catch (columnExistsError) {
-      // Column already exists, safe to ignore
-    }
+    } catch (columnExistsError) {}
+    
+    try {
+      await connection.query("ALTER TABLE articles ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP");
+      console.log('Successfully migrated database: Added created_at column.');
+    } catch (columnExistsError) {}
 
     console.log('Database tables verified/initialized.');
   } catch (error) {
