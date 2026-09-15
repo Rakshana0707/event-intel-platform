@@ -197,6 +197,24 @@ if (process.env.NODE_ENV === 'production') {
 initDatabase().then(() => {
   app.listen(PORT, () => {
     console.log(`🚀 Node.js Event Intelligence Server running on port ${PORT}`);
+    
+    // Transformation 2: Automated Background Cron Ingestion (Every 10 minutes)
+    const CRON_INTERVAL_MS = 10 * 60 * 1000;
+    console.log(`⏱️  Automated background ingestion scheduled every 10 minutes.`);
+    
+    setInterval(async () => {
+      try {
+        console.log(`[CRON] Initiating automated tech news ingestion...`);
+        const saved = await fetchNewsAndSave();
+        if (saved && saved.length > 0) {
+          console.log(`[CRON] Successfully ingested ${saved.length} new articles in the background.`);
+        } else {
+          console.log(`[CRON] No new unique articles found during this cycle.`);
+        }
+      } catch (err) {
+        console.error(`[CRON] Automated ingestion failed:`, err.message);
+      }
+    }, CRON_INTERVAL_MS);
   });
 }).catch(err => {
   console.error('❌ Failed to start server due to database initialization failure.');
